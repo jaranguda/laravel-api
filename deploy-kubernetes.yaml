@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-api
+spec:
+  selector:
+    matchLabels:
+      component: laravel-api
+  template:
+    metadata:
+      labels:
+        component: laravel-api
+    spec:
+      containers:
+      - name: laravel-api
+        image: laravelapi:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200m
+          requests:
+            cpu: 100m
+            memory: 100m
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: laravel-api
+  labels:
+    service: laravel-api
+spec:
+  type: NodePort
+  selector:
+    component: laravel-api
+  ports:
+  - port: 8000
+    targetPort: 8000

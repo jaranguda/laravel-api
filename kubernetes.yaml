@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-api
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: laravel-api
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - name: myapp-config
+        mountPath: /myapp-config
+  volumes:
+  - name: myapp-config
+    emptyDir: {}
+
+  initContainers:
+  - name: touch-data
+    image: debian
+    command: ['touch', '/myapp-config/data-touch.txt']
+    volumeMounts:
+      - name: myapp-config
+        mountPath: /myapp-config
